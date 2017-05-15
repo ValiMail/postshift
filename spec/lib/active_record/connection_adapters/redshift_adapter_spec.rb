@@ -4,9 +4,11 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
   describe 'Connection' do
     subject { ARTest.connect.connection }
 
-    it '#native_database_types' do
-      expect(subject.native_database_types.keys).to eq \
-        %i( primary_key string text integer float decimal datetime time date bigint boolean )
+    describe '#native_database_types' do
+      it do
+        expect(subject.native_database_types.keys).to eq \
+          %i( primary_key string text integer float decimal datetime time date bigint boolean )
+      end
     end
   end
 

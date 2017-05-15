@@ -23,5 +23,14 @@ RSpec.describe Reading, type: :model do
     describe 'Integer' do
       it { expect(subject.record_num).to be_a Integer }
     end
+
+    describe 'String' do
+      it { expect(subject.ptr_name).to be_a String }
+    end
+
+    # describe 'Boolean' do
+    #   it { expect(subject.dmarc_spf_pass).to be_a TrueClass }
+    #   it { expect(subject.dmarc_dkim_pass).to be_a TrueClass }
+    # end
   end
 end
