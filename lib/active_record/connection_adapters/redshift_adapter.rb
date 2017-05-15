@@ -1,10 +1,14 @@
+require 'active_record/connection_adapters/redshift/column'
+require 'active_record/connection_adapters/redshift/referential_integrity'
+require 'active_record/connection_adapters/redshift/schema_statements'
+
 module ActiveRecord
   module ConnectionHandling # :nodoc
     RS_VALID_CONN_PARAMS = [:host, :hostaddr, :port, :dbname, :user, :password, :connect_timeout,
-                         :client_encoding, :options, :application_name, :fallback_application_name,
-                         :keepalives, :keepalives_idle, :keepalives_interval, :keepalives_count,
-                         :tty, :sslmode, :requiressl, :sslcompression, :sslcert, :sslkey,
-                         :sslrootcert, :sslcrl, :requirepeer, :krbsrvname, :gsslib, :service]
+                            :client_encoding, :options, :application_name, :fallback_application_name,
+                            :keepalives, :keepalives_idle, :keepalives_interval, :keepalives_count,
+                            :tty, :sslmode, :requiressl, :sslcompression, :sslcert, :sslkey,
+                            :sslrootcert, :sslcrl, :requirepeer, :krbsrvname, :gsslib, :service]
 
     # Establishes a connection to the database that's used by all Active Record objects
     def redshift_connection(config)
@@ -43,6 +47,9 @@ module ActiveRecord
         boolean:     { name: 'boolean' },
       }.freeze
 
+      include Redshift::ReferentialIntegrity
+      include Redshift::SchemaStatements
+
       def supports_index_sort_order?
         false
       end
@@ -57,6 +64,10 @@ module ActiveRecord
 
       def supports_json?
         false
+      end
+
+      def native_database_types #:nodoc:
+        NATIVE_DATABASE_TYPES
       end
 
       def supports_extensions?
@@ -76,6 +87,7 @@ module ActiveRecord
       end
 
       def postgresql_version
+        # Will pass all inernal version support checks
         Float::INFINITY
       end
 
@@ -142,6 +154,36 @@ module ActiveRecord
           elsif !v.nil?
             execute("SET SESSION #{k} TO #{quote(v)}", 'SCHEMA')
           end
+        end
+
+        # Returns the list of a table's column names, data types, and default values.
+        #
+        # The underlying query is roughly:
+        #  SELECT column.name, column.type, default.value
+        #    FROM column LEFT JOIN default
+        #      ON column.table_id = default.table_id
+        #     AND column.num = default.column_num
+        #   WHERE column.table_id = get_table_id('table_name')
+        #     AND column.num > 0
+        #     AND NOT column.is_dropped
+        #   ORDER BY column.num
+        #
+        # If the table name is not prefixed with a schema, the database will
+        # take the first match from the schema search path.
+        #
+        # Query implementation notes:
+        #  - format_type includes the column size constraint, e.g. varchar(50)
+        #  - ::regclass is a function that gives the id for a table name
+        def column_definitions(table_name) # :nodoc:
+          query(<<-end_sql, 'SCHEMA')
+              SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+                     pg_get_expr(d.adbin, d.adrelid), a.attnotnull, a.atttypid, a.atttypmod
+                FROM pg_attribute a LEFT JOIN pg_attrdef d
+                  ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+               WHERE a.attrelid = '#{quote_table_name(table_name)}'::regclass
+                 AND a.attnum > 0 AND NOT a.attisdropped
+               ORDER BY a.attnum
+          end_sql
         end
       end
     end
