@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-class ColumnType < ActiveRecord::Base
+class DataType < ActiveRecord::Base
 end
 
-RSpec.describe ColumnType, type: :model do
+RSpec.describe DataType, type: :model do
   before { ARTest.connect }
 
   describe 'connection' do
