@@ -8,14 +8,6 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
-task :console do
-  require 'irb'
-  require 'irb/completion'
-  require 'postshift'
-  ARGV.clear
-  IRB.start
-end
-
 namespace :spec do
   namespace :db do
     task :environment do
