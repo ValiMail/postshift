@@ -1,3 +1,9 @@
+require 'active_support'
+require 'active_support/core_ext/module/deprecation'
+
+require 'active_record'
+require 'active_record/connection_adapters/postgresql_adapter'
+
 require 'active_record/connection_adapters/redshift/column'
 require 'active_record/connection_adapters/redshift/referential_integrity'
 require 'active_record/connection_adapters/redshift/schema_statements'
