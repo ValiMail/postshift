@@ -47,7 +47,7 @@ module ActiveRecord
         float:       { name: 'float' },
         decimal:     { name: 'decimal' },
         datetime:    { name: 'timestamp' },
-        time:        { name: 'time' },
+        time:        { name: 'timestamptz' },
         date:        { name: 'date' },
         bigint:      { name: 'bigint' },
         boolean:     { name: 'boolean' },
