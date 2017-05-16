@@ -27,6 +27,10 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       describe '#primary_keys' do
         pending
       end
+
+      describe '#foreign_keys' do
+        pending
+      end
     end
   end
 
@@ -57,14 +61,9 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       it { expect(subject).to_not be_supports_extensions }
     end
 
-    describe '#get_advisory_lock' do
-      it { expect(subject.get_advisory_lock).to be_nil }
+    describe '#supports_advisory_locks?' do
+      it { expect(subject).to_not be_supports_advisory_locks }
     end
-
-    describe '#read_advisory_lock' do
-      it { expect(subject.read_advisory_lock).to be_nil }
-    end
-
 
     describe '#supports_ranges?' do
       it { expect(subject).to_not be_supports_ranges }

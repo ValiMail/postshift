@@ -80,10 +80,8 @@ module ActiveRecord
         false
       end
 
-      def get_advisory_lock(*args) # :nodoc:
-      end
-
-      def release_advisory_lock(*args) # :nodoc:
+      def supports_advisory_locks?
+        false
       end
 
       def supports_ranges?
