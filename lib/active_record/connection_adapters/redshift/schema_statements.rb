@@ -23,11 +23,11 @@ module ActiveRecord
           execute "CREATE DATABASE #{quote_table_name(name)}#{option_string}"
         end
 
-        def index_name_exists?(table_name, index_name, default)
+        def index_name_exists?(*args)
           false
         end
 
-        def indexes(table_name, name = nil)
+        def indexes(*args)
           []
         end
 
@@ -51,13 +51,13 @@ module ActiveRecord
         def ctype
         end
 
-        def set_pk_sequence!(table, value) #:nodoc:
+        def set_pk_sequence!(*args) #:nodoc:
         end
 
-        def reset_pk_sequence!(table, pk = nil, sequence = nil) #:nodoc:
+        def reset_pk_sequence!(*args) #:nodoc:
         end
 
-        def pk_and_sequence_for(table) #:nodoc:
+        def pk_and_sequence_for(*args) #:nodoc:
           [nil, nil]
         end
 

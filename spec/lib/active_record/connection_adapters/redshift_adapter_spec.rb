@@ -10,6 +10,20 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
           %i( primary_key string text integer float decimal datetime time date bigint boolean )
       end
     end
+
+    describe 'SchemaStatements' do
+      describe '#columns' do
+        pending
+      end
+
+      describe '#new_column' do
+        pending
+      end
+
+      describe '#primary_keys' do
+        pending
+      end
+    end
   end
 
   describe 'Configuration Overrides' do
@@ -53,6 +67,36 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
 
     describe '#postgresql_version' do
       it { expect(subject.postgresql_version).to be Float::INFINITY }
+    end
+
+    describe 'SchemaStatements' do
+      describe '#index_name_exists?' do
+        it { expect(subject.index_name_exists?('any', 'thing', 'here')).to be false }
+      end
+
+      describe '#indexes' do
+        it { expect(subject.indexes('this-table')).to eq [] }
+      end
+
+      describe '#collation' do
+        it { expect(subject.collation).to be_nil }
+      end
+
+      describe '#ctype' do
+        it { expect(subject.ctype).to be_nil }
+      end
+
+      describe '#set_pk_sequence!' do
+        it { expect(subject.set_pk_sequence!('the-table', 'the-value')).to be_nil }
+      end
+
+      describe '#reset_pk_sequence!' do
+        it { expect(subject.reset_pk_sequence!('the-table')).to be_nil }
+      end
+
+      describe '#pk_and_sequence_for' do
+        it { expect(subject.pk_and_sequence_for('a-table')).to eq [nil, nil] }
+      end
     end
   end
 end
