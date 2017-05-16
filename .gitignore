@@ -6,11 +6,11 @@
 /doc/
 /pkg/
 /spec/reports/
+spec/db/schema.rb
 /tmp/
 
 # rspec failure tracking
 .rspec_status
-
 
 config.yml
 *.log
