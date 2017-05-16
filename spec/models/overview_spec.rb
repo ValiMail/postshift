@@ -1,19 +1,18 @@
 require 'spec_helper'
 
-class Reading < ActiveRecord::Base
-  self.table_name = :dmarc_report_records
+class Overview < ActiveRecord::Base
 end
 
-RSpec.describe Reading, type: :model do
+RSpec.describe Overview, type: :model do
   before { ARTest.connect }
 
   describe 'connection' do
     it 'is using RedshiftAdapter' do
-      expect(Reading.connection).to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter
+      expect(described_class.connection).to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter
     end
 
     it 'reads column names' do
-      raise Reading.column_names.inspect
+      raise described_class.column_names.inspect
     end
   end
 

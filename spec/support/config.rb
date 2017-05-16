@@ -11,12 +11,12 @@ module ARTest
     private
 
     def config_file
-      Pathname.new(ENV['ARCONFIG'] || TEST_ROOT + '/config.yml')
+      Pathname.new(ENV['ARCONFIG'] || 'spec/config.yml')
     end
 
     def read_config
       unless config_file.exist?
-        FileUtils.cp TEST_ROOT + '/config.example.yml', config_file
+        FileUtils.cp 'spec/config.example.yml', config_file
       end
       YAML.parse(config_file.read).transform
     end
