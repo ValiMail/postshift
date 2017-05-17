@@ -10,7 +10,9 @@ class CreateDataTypesTable < ActiveRecord::Migration[5.0]
       t.integer   'an_integer'
       t.integer   'a_small_integer',    limit: 2
       t.bigint    'a_bigint'
-      t.decimal   'a_decimal'
+      t.decimal   'a_decimal',          precision: 6, scale: 2
+      t.decimal   'a_non_decimal',      precision: 6, scale: 0
+      t.decimal   'a_large_decimal',    precision: 6, scale: 4
       t.float     'a_float'
 
       t.datetime  'a_datetime'

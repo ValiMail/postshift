@@ -118,7 +118,6 @@ module ActiveRecord
         m.register_type 'bool', Type::Boolean.new
         m.alias_type 'timestamptz', 'timestamp'
         m.register_type 'date', Type::Date.new
-        m.register_type 'time', Type::Time.new
 
         m.register_type 'timestamp' do |_, _, sql_type|
           precision = extract_precision(sql_type)
@@ -145,7 +144,28 @@ module ActiveRecord
           end
         end
 
-        # load_additional_types(m)
+        # m.register_type 'numeric' do |_, fmod, sql_type|
+        #   precision = extract_precision(sql_type)
+        #   scale = extract_scale(sql_type)
+
+        #   # # The type for the numeric depends on the width of the field,
+        #   # # so we'll do something special here.
+        #   # #
+        #   # # When dealing with decimal columns:
+        #   # #
+        #   # # places after decimal  = fmod - 4 & 0xffff
+        #   # # places before decimal = (fmod - 4) >> 16 & 0xffff
+        #   # if fmod && (fmod - 4 & 0xffff).zero?
+        #   #   # FIXME: Remove this class, and the second argument to
+        #   #   # lookups on PG
+        #   #   Type::DecimalWithoutScale.new(precision: precision)
+        #   # else
+        #   #   OID::Decimal.new(precision: precision, scale: scale)
+        #   # end
+        #   OID::Decimal.new(precision: precision, scale: scale)
+        # end
+
+        # # load_additional_types(m)
       end
 
       def configure_connection
@@ -196,6 +216,8 @@ module ActiveRecord
              ORDER BY a.attnum
         end_sql
       end
+
+      ActiveRecord::Type.register(:datetime, OID::DateTime, adapter: :postgresql)
     end
   end
 end
