@@ -22,14 +22,18 @@ module ActiveRecord
 
           execute "CREATE DATABASE #{quote_table_name(name)}#{option_string}"
         end
-
-        # def index_name_exists?(*args)
-        #   false
-        # end
-
-        # def indexes(*args)
-        #   []
-        # end
+ 
+        def create_table(table_name, comment: nil, **options)
+          if options.has_key?(:distkey)
+            options[:options] ||= ''
+            options[:options] += "DISTKEY(#{options.delete(:distkey)}) "
+          end
+          if options.has_key?(:sortkey)
+            options[:options] ||= ''
+            options[:options] += "SORTKEY(#{options.delete(:sortkey)}) "
+          end
+          super
+        end
 
         # Returns the list of all column definitions for a table.
         def columns(table_name)
@@ -44,22 +48,6 @@ module ActiveRecord
         def new_column(name, default, sql_type_metadata = nil, null = true, table_name = nil, default_function = nil) # :nodoc:
           RedshiftColumn.new(name, default, sql_type_metadata, null, table_name, default_function)
         end
-
-        # def collation
-        # end
-
-        # def ctype
-        # end
-
-        # def set_pk_sequence!(*args) #:nodoc:
-        # end
-
-        # def reset_pk_sequence!(*args) #:nodoc:
-        # end
-
-        # def pk_and_sequence_for(*args) #:nodoc:
-        #   [nil, nil]
-        # end
 
         # Returns just a table's primary key
         def primary_keys(table)

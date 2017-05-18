@@ -16,6 +16,10 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
         pending 'Ensure full method is needed.  Possibly reduce options and call super?'
       end
 
+      describe '#create_table' do
+        pending
+      end
+
       describe '#columns' do
         pending
       end

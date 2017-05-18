@@ -6,6 +6,7 @@ require 'active_record/connection_adapters/postgresql_adapter'
 
 require 'active_record/connection_adapters/redshift/column'
 require 'active_record/connection_adapters/redshift/referential_integrity'
+require 'active_record/connection_adapters/redshift/schema_definitions'
 require 'active_record/connection_adapters/redshift/schema_statements'
 
 module ActiveRecord
