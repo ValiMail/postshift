@@ -88,6 +88,10 @@ module ActiveRecord
         false
       end
 
+      def use_insert_returning?
+        false
+      end
+
       def supports_advisory_locks?
         false
       end
@@ -97,10 +101,6 @@ module ActiveRecord
       end
 
       def supports_materialized_views?
-        false
-      end
-
-      def use_insert_returning?
         false
       end
 
