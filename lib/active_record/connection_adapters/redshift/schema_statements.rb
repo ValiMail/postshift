@@ -11,25 +11,25 @@ module ActiveRecord
 
           option_string = options.inject("") do |memo, (key, value)|
             memo += case key
-            when :owner
-              " OWNER = \"#{value}\""
-            when :connection_limit
-              " CONNECTION LIMIT = #{value}"
-            else
-              '' 
-            end
+                    when :owner
+                      " OWNER = \"#{value}\""
+                    when :connection_limit
+                      " CONNECTION LIMIT = #{value}"
+                    else
+                      ''
+                    end
           end
 
           execute "CREATE DATABASE #{quote_table_name(name)}#{option_string}"
         end
 
-        def index_name_exists?(*args)
-          false
-        end
+        # def index_name_exists?(*args)
+        #   false
+        # end
 
-        def indexes(*args)
-          []
-        end
+        # def indexes(*args)
+        #   []
+        # end
 
         # Returns the list of all column definitions for a table.
         def columns(table_name)
@@ -45,11 +45,11 @@ module ActiveRecord
           RedshiftColumn.new(name, default, sql_type_metadata, null, table_name, default_function)
         end
 
-        def collation
-        end
+        # def collation
+        # end
 
-        def ctype
-        end
+        # def ctype
+        # end
 
         # def set_pk_sequence!(*args) #:nodoc:
         # end

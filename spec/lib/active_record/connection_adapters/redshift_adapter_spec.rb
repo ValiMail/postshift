@@ -45,12 +45,20 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       it { expect(subject).to_not be_supports_partial_index }
     end
 
+    describe '#supports_expression_index?' do
+      it { expect(subject).to_not be_supports_expression_index }
+    end
+
     describe '#supports_supports_transaction_isolation?' do
       it { expect(subject).to_not be_supports_transaction_isolation }
     end
 
     describe '#supports_json?' do
       it { expect(subject).to_not be_supports_json }
+    end
+
+    describe '#supports_savepoints?' do
+      it { expect(subject).to_not be_supports_savepoints }
     end
 
     describe '#supports_extensions?' do
@@ -86,21 +94,21 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
     end
 
     describe 'SchemaStatements' do
-      describe '#index_name_exists?' do
-        it { expect(subject.index_name_exists?('any', 'thing', 'here')).to be false }
-      end
+      # describe '#index_name_exists?' do
+      #   it { expect(subject.index_name_exists?('any', 'thing', 'here')).to be false }
+      # end
 
-      describe '#indexes' do
-        it { expect(subject.indexes('this-table')).to eq [] }
-      end
+      # describe '#indexes' do
+      #   it { expect(subject.indexes('this-table')).to eq [] }
+      # end
 
-      describe '#collation' do
-        it { expect(subject.collation).to be_nil }
-      end
+      # describe '#collation' do
+      #   it { expect(subject.collation).to be_nil }
+      # end
 
-      describe '#ctype' do
-        it { expect(subject.ctype).to be_nil }
-      end
+      # describe '#ctype' do
+      #   it { expect(subject.ctype).to be_nil }
+      # end
 
       # describe '#set_pk_sequence!' do
       #   it { expect(subject.set_pk_sequence!('the-table', 'the-value')).to be_nil }

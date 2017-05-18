@@ -64,11 +64,19 @@ module ActiveRecord
         false
       end
 
+      def supports_expression_index?
+        false
+      end
+
       def supports_transaction_isolation?
         false
       end
 
       def supports_json?
+        false
+      end
+
+      def supports_savepoints?
         false
       end
 
@@ -143,29 +151,6 @@ module ActiveRecord
             OID::Decimal.new(precision: precision, scale: scale)
           end
         end
-
-        # m.register_type 'numeric' do |_, fmod, sql_type|
-        #   precision = extract_precision(sql_type)
-        #   scale = extract_scale(sql_type)
-
-        #   # # The type for the numeric depends on the width of the field,
-        #   # # so we'll do something special here.
-        #   # #
-        #   # # When dealing with decimal columns:
-        #   # #
-        #   # # places after decimal  = fmod - 4 & 0xffff
-        #   # # places before decimal = (fmod - 4) >> 16 & 0xffff
-        #   # if fmod && (fmod - 4 & 0xffff).zero?
-        #   #   # FIXME: Remove this class, and the second argument to
-        #   #   # lookups on PG
-        #   #   Type::DecimalWithoutScale.new(precision: precision)
-        #   # else
-        #   #   OID::Decimal.new(precision: precision, scale: scale)
-        #   # end
-        #   OID::Decimal.new(precision: precision, scale: scale)
-        # end
-
-        # # load_additional_types(m)
       end
 
       def configure_connection
@@ -216,8 +201,6 @@ module ActiveRecord
              ORDER BY a.attnum
         end_sql
       end
-
-      ActiveRecord::Type.register(:datetime, OID::DateTime, adapter: :postgresql)
     end
   end
 end
