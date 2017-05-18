@@ -106,5 +106,4 @@ RSpec.describe Transactional, type: :model do
       end
     end
   end
-
 end

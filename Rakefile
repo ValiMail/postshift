@@ -6,7 +6,7 @@ require_relative 'spec/support/connection'
 
 RSpec::Core::RakeTask.new(:spec)
 
-task :default => :spec
+task default: :spec
 
 namespace :spec do
   include ActiveRecord::Tasks
