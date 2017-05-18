@@ -24,14 +24,9 @@ module ActiveRecord
         end
  
         def create_table(table_name, comment: nil, **options)
-          if options.has_key?(:distkey)
-            options[:options] ||= ''
-            options[:options] += "DISTKEY(#{options.delete(:distkey)}) "
-          end
-          if options.has_key?(:sortkey)
-            options[:options] ||= ''
-            options[:options] += "SORTKEY(#{options.delete(:sortkey)}) "
-          end
+          options[:options] ||= ''
+          options[:options] += "DISTKEY(#{options.delete(:distkey)}) " if options.key?(:distkey)
+          options[:options] += "SORTKEY(#{options.delete(:sortkey)}) " if options.key?(:sortkey)
           super
         end
 
