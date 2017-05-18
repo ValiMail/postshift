@@ -51,15 +51,15 @@ module ActiveRecord
         def ctype
         end
 
-        def set_pk_sequence!(*args) #:nodoc:
-        end
+        # def set_pk_sequence!(*args) #:nodoc:
+        # end
 
-        def reset_pk_sequence!(*args) #:nodoc:
-        end
+        # def reset_pk_sequence!(*args) #:nodoc:
+        # end
 
-        def pk_and_sequence_for(*args) #:nodoc:
-          [nil, nil]
-        end
+        # def pk_and_sequence_for(*args) #:nodoc:
+        #   [nil, nil]
+        # end
 
         # Returns just a table's primary key
         def primary_keys(table)

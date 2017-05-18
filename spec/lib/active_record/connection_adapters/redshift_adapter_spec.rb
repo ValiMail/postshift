@@ -49,10 +49,6 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       it { expect(subject).to_not be_supports_transaction_isolation }
     end
 
-    describe '#supports_supports_transaction_isolation?' do
-      it { expect(subject).to_not be_supports_transaction_isolation }
-    end
-
     describe '#supports_json?' do
       it { expect(subject).to_not be_supports_json }
     end
@@ -106,17 +102,17 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
         it { expect(subject.ctype).to be_nil }
       end
 
-      describe '#set_pk_sequence!' do
-        it { expect(subject.set_pk_sequence!('the-table', 'the-value')).to be_nil }
-      end
+      # describe '#set_pk_sequence!' do
+      #   it { expect(subject.set_pk_sequence!('the-table', 'the-value')).to be_nil }
+      # end
 
-      describe '#reset_pk_sequence!' do
-        it { expect(subject.reset_pk_sequence!('the-table')).to be_nil }
-      end
+      # describe '#reset_pk_sequence!' do
+      #   it { expect(subject.reset_pk_sequence!('the-table')).to be_nil }
+      # end
 
-      describe '#pk_and_sequence_for' do
-        it { expect(subject.pk_and_sequence_for('a-table')).to eq [nil, nil] }
-      end
+      # describe '#pk_and_sequence_for' do
+      #   it { expect(subject.pk_and_sequence_for('a-table')).to eq [nil, nil] }
+      # end
     end
   end
 end
