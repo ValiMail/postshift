@@ -42,6 +42,10 @@ module ActiveRecord
           super
         end
 
+        def indexes(*args)
+          []
+        end
+
         # Returns the list of all column definitions for a table.
         def columns(table_name)
           column_definitions(table_name.to_s).map do |column_name, type, default, notnull, oid, fmod, encoding|
