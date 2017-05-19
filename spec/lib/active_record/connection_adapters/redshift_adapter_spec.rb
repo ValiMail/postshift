@@ -102,9 +102,9 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       #   it { expect(subject.index_name_exists?('any', 'thing', 'here')).to be false }
       # end
 
-      # describe '#indexes' do
-      #   it { expect(subject.indexes('this-table')).to eq [] }
-      # end
+      describe '#indexes' do
+        it { expect(subject.indexes('this-table')).to eq [] }
+      end
 
       # describe '#collation' do
       #   it { expect(subject.collation).to be_nil }
