@@ -35,7 +35,7 @@ RSpec.describe PrimaryKeyTest, type: :model do
 end
 
 RSpec.describe NoPrimaryKeyTest, type: :model do
-  before  { ARTest.connect }
+  before { ARTest.connect }
 
   describe '.primary_key' do
     it 'does not have one' do
@@ -45,7 +45,7 @@ RSpec.describe NoPrimaryKeyTest, type: :model do
 end
 
 RSpec.describe CustomPrimaryKeyTest, type: :model do
-  before  { ARTest.connect }
+  before { ARTest.connect }
 
   describe '.primary_key' do
     it 'identifies the custom column' do

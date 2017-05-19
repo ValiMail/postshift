@@ -33,12 +33,13 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.2.2'
 
   spec.add_dependency 'pg', '~> 0.20.0'
-  spec.add_dependency 'activerecord', '5.0.2'
-  spec.add_dependency 'activesupport', '5.0.2'
+  spec.add_dependency 'activerecord', '>= 5.0'
+  spec.add_dependency 'activesupport', '>= 5.0'
 
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'factory_girl', '~> 4.8.0'
   spec.add_development_dependency 'database_cleaner', '~> 1.6.0'
+  spec.add_development_dependency 'appraisal', '~> 2.2.0'
 end

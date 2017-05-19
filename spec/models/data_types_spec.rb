@@ -33,7 +33,7 @@ RSpec.describe DataType, type: :model do
   end
 
   describe 'data' do
-    subject   { described_class.last }
+    subject { described_class.last }
 
     describe '#id' do
       before  { create(:data_type) }
