@@ -4,13 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'postshift/version'
 
 Gem::Specification.new do |spec|
+  spec.platform      = Gem::Platform::RUBY
   spec.name          = 'postshift'
   spec.version       = Postshift::VERSION
   spec.authors       = ['Dave Krupinski']
   spec.email         = ['david.krupinski@valimail.com']
 
-  spec.summary       = %q{Amazon Redshift adapater for ActiveRecord 5 and above.}
-  spec.description   = %q{Amazon Redshift adapater for ActiveRecord 5 and above.}
+  spec.summary       = %q{Amazon Redshift adapter for ActiveRecord 5 and above.}
+  spec.description   = %q{Thin ActiveRecord Redshift Adapter on existing PostgreSQL adapter.}
   spec.homepage      = 'http://github.com'
   spec.license       = 'MIT'
 
