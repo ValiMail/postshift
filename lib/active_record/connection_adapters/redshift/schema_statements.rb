@@ -1,6 +1,18 @@
 module ActiveRecord
   module ConnectionAdapters
     module Redshift
+      class SchemaCreation < PostgreSQL::SchemaCreation
+        private
+
+        def add_column_options!(sql, options)
+          sql = super
+          if options[:column].encoding.present?
+            sql << " ENCODE #{options[:column].encoding}"
+          end
+          sql
+        end
+      end
+
       module SchemaStatements
         # Create a new Redshift database. Options include <tt>:owner</tt> and <tt>:connection_limit</tt> 
         # Example:
@@ -32,9 +44,9 @@ module ActiveRecord
 
         # Returns the list of all column definitions for a table.
         def columns(table_name)
-          column_definitions(table_name.to_s).map do |column_name, type, default, notnull, oid, fmod|
+          column_definitions(table_name.to_s).map do |column_name, type, default, notnull, oid, fmod, encoding|
             default_value = extract_value_from_default(default)
-            type_metadata = fetch_type_metadata(column_name, type, oid, fmod)
+            type_metadata = fetch_type_metadata(column_name, type, oid, fmod, encoding)
             default_function = extract_default_function(default_value, default)
             new_column(column_name, default_value, type_metadata, notnull == 'f', table_name, default_function)
           end
@@ -85,6 +97,18 @@ module ActiveRecord
 
             ForeignKeyDefinition.new(table_name, row['to_table'], options)
           end
+        end
+
+        def fetch_type_metadata(column_name, sql_type, oid, fmod, encoding)
+          cast_type = get_oid_type(oid, fmod, column_name, sql_type)
+          simple_type = SqlTypeMetadata.new(
+            sql_type: sql_type,
+            type: cast_type.type,
+            limit: cast_type.limit,
+            precision: cast_type.precision,
+            scale: cast_type.scale,
+          )
+          RedshiftSQLTypeMetadata.new(simple_type, oid: oid, fmod: fmod, encoding: encoding)
         end
       end
     end

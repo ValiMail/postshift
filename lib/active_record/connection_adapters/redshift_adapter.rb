@@ -8,6 +8,7 @@ require 'active_record/connection_adapters/redshift/column'
 require 'active_record/connection_adapters/redshift/referential_integrity'
 require 'active_record/connection_adapters/redshift/schema_definitions'
 require 'active_record/connection_adapters/redshift/schema_statements'
+require 'active_record/connection_adapters/redshift/type_metadata'
 
 module ActiveRecord
   module ConnectionHandling # :nodoc
@@ -56,6 +57,10 @@ module ActiveRecord
 
       include Redshift::ReferentialIntegrity
       include Redshift::SchemaStatements
+
+      def schema_creation # :nodoc:
+        Redshift::SchemaCreation.new self
+      end
 
       def supports_index_sort_order?
         false
@@ -194,13 +199,18 @@ module ActiveRecord
       def column_definitions(table_name) # :nodoc:
         query(<<-end_sql, 'SCHEMA')
             SELECT a.attname, format_type(a.atttypid, a.atttypmod),
-                   pg_get_expr(d.adbin, d.adrelid), a.attnotnull, a.atttypid, a.atttypmod
+                   pg_get_expr(d.adbin, d.adrelid), a.attnotnull, a.atttypid, a.atttypmod,
+                   format_encoding(a.attencodingtype::integer)
               FROM pg_attribute a LEFT JOIN pg_attrdef d
                 ON a.attrelid = d.adrelid AND a.attnum = d.adnum
              WHERE a.attrelid = '#{quote_table_name(table_name)}'::regclass
                AND a.attnum > 0 AND NOT a.attisdropped
              ORDER BY a.attnum
         end_sql
+      end
+
+      def create_table_definition(*args) # :nodoc:
+        Redshift::TableDefinition.new(*args)
       end
     end
   end
