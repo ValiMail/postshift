@@ -7,6 +7,7 @@ require 'active_record/connection_adapters/postgresql_adapter'
 require 'active_record/connection_adapters/redshift/column'
 require 'active_record/connection_adapters/redshift/referential_integrity'
 require 'active_record/connection_adapters/redshift/schema_definitions'
+require 'active_record/connection_adapters/redshift/schema_dumper'
 require 'active_record/connection_adapters/redshift/schema_statements'
 require 'active_record/connection_adapters/redshift/type_metadata'
 
@@ -55,6 +56,7 @@ module ActiveRecord
         boolean:     { name: 'boolean' },
       }.freeze
 
+      include Redshift::ColumnDumper
       include Redshift::ReferentialIntegrity
       include Redshift::SchemaStatements
 
