@@ -18,12 +18,24 @@ RSpec.describe DataType, type: :model do
       expect(described_class.connection).to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter
     end
 
-    it '#column_names' do
-      expect(described_class.column_names).to eq \
-        %w( id a_string a_small_string a_required_string a_text
-            an_integer a_small_integer a_bigint a_decimal a_non_decimal a_large_decimal a_float
-            a_datetime a_time a_date
-            a_boolean a_required_boolean a_true_boolean a_false_boolean )
+    describe '#column_names' do
+      it 'returns array of names' do
+        expect(described_class.column_names).to eq \
+          %w( id a_string a_small_string a_required_string a_text
+              an_integer a_small_integer a_bigint a_decimal a_non_decimal a_large_decimal a_float
+              a_datetime a_time a_date
+              a_boolean a_required_boolean a_true_boolean a_false_boolean )
+      end
+    end
+
+    describe '#columns' do
+      subject { described_class.columns }
+
+      it 'is a collection of RedshiftColumns' do
+        subject.each do |col|
+          expect(col).to be_a ActiveRecord::ConnectionAdapters::RedshiftColumn
+        end
+      end
     end
   end
 

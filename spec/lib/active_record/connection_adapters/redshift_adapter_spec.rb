@@ -20,19 +20,22 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
         pending
       end
 
-      describe '#columns' do
-        pending
-      end
-
       describe '#new_column' do
-        pending
+        let(:column) { subject.new_column('test', 'default', 'the-data', false, 'testing') }
+
+        it { expect(column).to be_a ActiveRecord::ConnectionAdapters::RedshiftColumn }
+        it { expect(column.name).to eq 'test' }
+        it { expect(column.table_name).to eq 'testing' }
+        it { expect(column.sql_type_metadata).to eq 'the-data' }
+        it { expect(column.null).to be false }
+        it { expect(column.default).to eq 'default' }
       end
 
       describe '#table_options' do
         context 'w/ table has dist & sort keys' do
           it 'returns an empty hash' do
             expect(subject.table_options('table_options')).to \
-              eq({ distkey: 'name', sortkey: 'number' })
+              eq(distkey: 'name', sortkey: 'number')
           end
         end
 
