@@ -25,11 +25,6 @@ RSpec.describe DataType, type: :model do
             a_datetime a_time a_date
             a_boolean a_required_boolean a_true_boolean a_false_boolean )
     end
-
-    # it 'column types', focus: true do
-    #   raise described_class.column_for_attribute(:a_decimal).inspect
-    #   raise described_class.public_methods.inspect
-    # end
   end
 
   describe 'data' do

@@ -29,23 +29,46 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
       end
 
       describe '#table_options' do
-        pending
+        context 'w/ table has dist & sort keys' do
+          it 'returns an empty hash' do
+            expect(subject.table_options('table_options')).to \
+              eq({ distkey: 'name', sortkey: 'number' })
+          end
+        end
+
+        context 'w/ table has no additional settings' do
+          it 'returns an empty hash' do
+            expect(subject.table_options('column_options')).to eq({})
+          end
+        end
       end
 
       describe '#table_distkey' do
-        pending
+        context 'w/ exists on table' do
+          it 'returns column name' do
+            expect(subject.table_distkey('table_options')).to eq 'name'
+          end
+        end
+
+        context 'w/ does not exist on table' do
+          it 'returns nil' do
+            expect(subject.table_distkey('column_options')).to be_nil
+          end
+        end
       end
 
       describe '#table_sortkey' do
-        pending
-      end
+        context 'w/ exists on table' do
+          it 'returns column name' do
+            expect(subject.table_sortkey('table_options')).to eq 'number'
+          end
+        end
 
-      describe '#primary_keys' do
-        pending
-      end
-
-      describe '#foreign_keys' do
-        pending
+        context 'w/ does not exist on table' do
+          it 'returns nil' do
+            expect(subject.table_sortkey('column_options')).to be_nil
+          end
+        end
       end
 
       describe '#fetch_type_metadata' do
@@ -114,33 +137,9 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
     end
 
     describe 'SchemaStatements' do
-      # describe '#index_name_exists?' do
-      #   it { expect(subject.index_name_exists?('any', 'thing', 'here')).to be false }
-      # end
-
       describe '#indexes' do
         it { expect(subject.indexes('this-table')).to eq [] }
       end
-
-      # describe '#collation' do
-      #   it { expect(subject.collation).to be_nil }
-      # end
-
-      # describe '#ctype' do
-      #   it { expect(subject.ctype).to be_nil }
-      # end
-
-      # describe '#set_pk_sequence!' do
-      #   it { expect(subject.set_pk_sequence!('the-table', 'the-value')).to be_nil }
-      # end
-
-      # describe '#reset_pk_sequence!' do
-      #   it { expect(subject.reset_pk_sequence!('the-table')).to be_nil }
-      # end
-
-      # describe '#pk_and_sequence_for' do
-      #   it { expect(subject.pk_and_sequence_for('a-table')).to eq [nil, nil] }
-      # end
     end
   end
 end
