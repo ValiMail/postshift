@@ -28,11 +28,27 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
         pending
       end
 
+      describe '#table_options' do
+        pending
+      end
+
+      describe '#table_distkey' do
+        pending
+      end
+
+      describe '#table_sortkey' do
+        pending
+      end
+
       describe '#primary_keys' do
         pending
       end
 
       describe '#foreign_keys' do
+        pending
+      end
+
+      describe '#fetch_type_metadata' do
         pending
       end
     end

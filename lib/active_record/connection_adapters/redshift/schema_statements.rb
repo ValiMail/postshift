@@ -42,7 +42,7 @@ module ActiveRecord
           super
         end
 
-        def indexes(*args)
+        def indexes(*)
           []
         end
 
@@ -54,10 +54,29 @@ module ActiveRecord
             default_function = extract_default_function(default_value, default)
             new_column(column_name, default_value, type_metadata, notnull == 'f', table_name, default_function)
           end
-        end        
+        end
 
         def new_column(name, default, sql_type_metadata = nil, null = true, table_name = nil, default_function = nil) # :nodoc:
           RedshiftColumn.new(name, default, sql_type_metadata, null, table_name, default_function)
+        end
+
+        def table_options(table_name) # :nodoc:
+          {}.tap do |options|
+            if (distkey = table_distkey(table_name)).present?
+              options[:distkey] = distkey
+            end
+            if (sortkey = table_sortkey(table_name)).present?
+              options[:sortkey] = sortkey
+            end
+          end
+        end
+
+        def table_distkey(table_name) # :nodoc:
+          select_value("SELECT \"column\" FROM pg_table_def WHERE tablename = #{quote(table_name)} AND distkey = true")
+        end
+
+        def table_sortkey(table_name) # :nodoc:
+          select_value("SELECT \"column\" FROM pg_table_def WHERE tablename = #{quote(table_name)} AND sortkey = true")
         end
 
         # Returns just a table's primary key
