@@ -6,10 +6,20 @@ module ActiveRecord
 
         def add_column_options!(sql, options)
           sql = super
-          if options[:column].encoding.present?
-            sql << " ENCODE #{options[:column].encoding}"
+          if (encoding = encoding_option(options)).present?
+            sql << " ENCODE #{encoding}"
           end
           sql
+        end
+
+        private
+
+        def encoding_option(options)
+          if ActiveRecord.version < Gem::Version.new('5.1')
+            options[:column].encoding
+          else
+            options[:encoding]
+          end
         end
       end
 
