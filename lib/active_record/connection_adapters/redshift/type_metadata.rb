@@ -5,7 +5,7 @@ module ActiveRecord
 
       def initialize(type_metadata, oid: nil, fmod: nil, encoding: nil)
         super(type_metadata, oid: oid, fmod: fmod)
-        @encoding = encoding
+        @encoding = encoding unless encoding == 'none'
       end
 
       protected
