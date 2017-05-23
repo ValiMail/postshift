@@ -2,6 +2,12 @@ module ActiveRecord
   module ConnectionAdapters
     module Redshift
       module ColumnDumper
+        def column_spec_for_primary_key(column)
+          super.tap do |spec|
+            spec[:id] = ':primary_key' if column.sql_type == 'primary_key'
+          end
+        end
+
         # Adds +:encoding+ option to the default set
         def prepare_column_options(column)
           super.tap do |spec|

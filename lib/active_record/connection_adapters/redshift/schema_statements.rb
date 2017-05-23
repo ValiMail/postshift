@@ -58,10 +58,16 @@ module ActiveRecord
         def columns(table_name)
           column_definitions(table_name.to_s).map do |column_name, type, default, notnull, oid, fmod, encoding|
             default_value = extract_value_from_default(default)
+            type = determine_primary_key_type_conversion(type, default)
             type_metadata = fetch_type_metadata(column_name, type, oid, fmod, encoding)
             default_function = extract_default_function(default_value, default)
-            new_column(column_name, default_value, type_metadata, notnull == 'f', table_name, default_function)
+            new_column(column_name, default_value, type_metadata, notnull == false, table_name, default_function)
           end
+        end
+
+        def determine_primary_key_type_conversion(type, default)
+          return 'primary_key' if (type == 'integer' && default.to_s.starts_with?('"identity"'))
+          type
         end
 
         def new_column(name, default, sql_type_metadata = nil, null = true, table_name = nil, default_function = nil) # :nodoc:
