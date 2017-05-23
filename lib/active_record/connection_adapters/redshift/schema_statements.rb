@@ -12,8 +12,6 @@ module ActiveRecord
           sql
         end
 
-        private
-
         def encoding_option(options)
           if ActiveRecord.version < Gem::Version.new('5.1')
             options[:column].encoding
@@ -86,7 +84,8 @@ module ActiveRecord
         end
 
         def table_sortkey(table_name) # :nodoc:
-          select_value("SELECT \"column\" FROM pg_table_def WHERE tablename = #{quote(table_name)} AND sortkey = true")
+          columns = select_values("SELECT \"column\" FROM pg_table_def WHERE tablename = #{quote(table_name)} AND sortkey > 0 ORDER BY sortkey ASC")
+          columns.present? ? columns.join(', ') : nil
         end
 
         # Returns just a table's primary key

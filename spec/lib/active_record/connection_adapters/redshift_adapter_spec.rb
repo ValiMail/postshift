@@ -67,6 +67,12 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
           end
         end
 
+        context 'w/ multiple exist on table' do
+          it 'returns column names in correct order' do
+            expect(subject.table_sortkey('table_options_multi_sorts')).to eq 'number1, number2, number3'
+          end
+        end
+
         context 'w/ does not exist on table' do
           it 'returns nil' do
             expect(subject.table_sortkey('column_options')).to be_nil
