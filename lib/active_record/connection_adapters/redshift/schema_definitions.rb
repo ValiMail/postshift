@@ -32,7 +32,7 @@ module ActiveRecord
         class TableDefinition < ActiveRecord::ConnectionAdapters::PostgreSQL::TableDefinition
           def primary_key(name, type=:primary_key, **options)
             ints = %i(integer bigint)
-            options[:auto_increment] = true if ints.include?(type) && !options.key?(:default)
+            options[:auto_increment] ||= true if ints.include?(type) && !options.key?(:default)
             type = :primary_key if ints.include?(type) && options.delete(:auto_increment) == true
             super
           end
