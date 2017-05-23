@@ -1,9 +1,10 @@
-adapter: redshift
-host: your-host-here
-port: 5439
-database: your-db-name
-username: your-username
-password: your-password
-encoding: utf8
-pool: 3
-timeout: 5000
+test:
+  adapter: redshift
+  host: your-host-here
+  port: 5439
+  database: your-db-name
+  username: your-username
+  password: your-password
+  encoding: utf8
+  pool: 3
+  timeout: 5000

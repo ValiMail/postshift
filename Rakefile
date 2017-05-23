@@ -13,8 +13,10 @@ namespace :spec do
 
   task :environment do
     ARTest.connect
+    # DatabaseTasks.current_config = ARTest.config
     DatabaseTasks.database_configuration = ARTest.config
     DatabaseTasks.db_dir = File.expand_path('../spec/db', __FILE__)
+    DatabaseTasks.env = 'test'
     DatabaseTasks.migrations_paths = File.join(DatabaseTasks.db_dir, 'migrate')
   end
 
