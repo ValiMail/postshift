@@ -84,6 +84,13 @@ To run the full test suite, a functioning Redshift database instance is required
 And finally, you can now run the entire test suite:
 
 	rake spec
+	
+The spec structure is based on reliance of an available running Redshift instance.  These specs can be run separately:
+
+```
+rake spec:isolated	# Run isolated non-Redshift reliant code examples
+rake spec:redshift	# Run Redshift reliant code examples
+```
 
 Additionally, there is multi-version test support through [Appraisal](https://github.com/thoughtbot/appraisal).
 
