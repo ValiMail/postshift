@@ -11,6 +11,16 @@ task default: :spec
 namespace :spec do
   include ActiveRecord::Tasks
 
+  desc 'Run isolated non-Redshift reliant code examples'
+  RSpec::Core::RakeTask.new(:isolated) do |t|
+    t.pattern = 'spec/lib/**/*_spec.rb'
+  end
+
+  desc 'Run Redshift reliant code examples'
+  RSpec::Core::RakeTask.new(:redshift) do |t|
+    t.pattern = 'spec/redshift/**/*_spec.rb'
+  end
+
   task :environment do
     ARTest.connect
     # DatabaseTasks.current_config = ARTest.config
