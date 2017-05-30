@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class QueryTest < ActiveRecord::Base
 end
@@ -12,8 +12,6 @@ FactoryGirl.define do
 end
 
 RSpec.describe QueryTest, type: :model do
-  before { ARTest.connect }
-
   describe '#count' do
     before { 5.times { create(:query_test) } }
 

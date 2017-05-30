@@ -6,6 +6,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
+    ARTest.connect
     FactoryGirl.find_definitions
     DatabaseCleaner.strategy = :deletion
   end

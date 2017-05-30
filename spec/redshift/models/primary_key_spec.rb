@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class PrimaryKeyTest < ActiveRecord::Base
 end
@@ -21,7 +21,6 @@ FactoryGirl.define do
 end
 
 RSpec.describe PrimaryKeyTest, type: :model do
-  before  { ARTest.connect }
   subject { create(:primary_key_test, name: 'pk-test') }
   before  { subject }
 
@@ -49,8 +48,6 @@ RSpec.describe PrimaryKeyTest, type: :model do
 end
 
 RSpec.describe NoPrimaryKeyTest, type: :model do
-  before { ARTest.connect }
-
   describe '.primary_key' do
     it 'does not have one' do
       expect(described_class.primary_key).to be_nil
@@ -59,8 +56,6 @@ RSpec.describe NoPrimaryKeyTest, type: :model do
 end
 
 RSpec.describe CustomPrimaryKeyTest, type: :model do
-  before { ARTest.connect }
-
   describe '.primary_key' do
     it 'identifies the custom column' do
       expect(described_class.primary_key).to eq 'for_me'
@@ -69,8 +64,6 @@ RSpec.describe CustomPrimaryKeyTest, type: :model do
 end
 
 RSpec.describe NonIncrementPrimaryKeyTest, type: :model do
-  before { ARTest.connect }
-
   describe '.primary_key' do
     it 'identifies the column' do
       expect(described_class.primary_key).to eq 'id'
@@ -87,8 +80,6 @@ RSpec.describe NonIncrementPrimaryKeyTest, type: :model do
 end
 
 RSpec.describe StringPrimaryKeyTest, type: :model do
-  before { ARTest.connect }
-
   describe '.primary_key' do
     it 'identifies the column' do
       expect(described_class.primary_key).to eq 'id'

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class DataType < ActiveRecord::Base
 end
@@ -11,8 +11,6 @@ FactoryGirl.define do
 end
 
 RSpec.describe DataType, type: :model do
-  before { ARTest.connect }
-
   describe 'connection' do
     it 'is using RedshiftAdapter' do
       expect(described_class.connection).to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter

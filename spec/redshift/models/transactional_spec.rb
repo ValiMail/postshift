@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class Transactional < ActiveRecord::Base
 end
@@ -10,8 +10,6 @@ FactoryGirl.define do
 end
 
 RSpec.describe Transactional, type: :model do
-  before { ARTest.connect }
-
   describe 'create' do
     describe 'failure' do
       let(:action) do

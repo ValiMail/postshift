@@ -1,10 +1,9 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class TableOption < ActiveRecord::Base
 end
 
 RSpec.describe TableOption, type: :model do
-  before  { ARTest.connect }
   let(:columns_sql) { "SELECT \"column\", encoding, distkey, sortkey FROM pg_table_def WHERE tablename = '#{described_class.table_name}';" }
   let(:columns) { described_class.connection.query(columns_sql) }
 

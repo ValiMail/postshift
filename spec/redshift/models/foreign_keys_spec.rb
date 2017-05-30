@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 class Domestic < ActiveRecord::Base
 end
@@ -7,8 +7,6 @@ class Foreign < ActiveRecord::Base
 end
 
 RSpec.describe Foreign, type: :model do
-  before { ARTest.connect }
-
   context 'w/o any foreign keys' do
     subject { described_class.connection.foreign_keys('domestics') }
 
