@@ -1,0 +1,7 @@
+dependencies:
+database:
+  override:
+    - echo 'Skipping DB section.'
+test:
+  override:
+    - bundle exec rake spec:isolated
