@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Amazon Redshift adapter for ActiveRecord 5 and above.}
   spec.description   = %q{Thin ActiveRecord Redshift Adapter extension for existing PostgreSQL adapter.}
-  spec.homepage      = 'http://github.com'
+  spec.homepage      = 'https://github.com/ValiMail/postshift'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
