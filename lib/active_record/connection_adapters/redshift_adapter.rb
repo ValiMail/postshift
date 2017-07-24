@@ -119,7 +119,7 @@ module ActiveRecord
 
     private
 
-      # TODO: Copied from PostgreSQL with minor registration changes.  If broken out, could override segments, etc
+      # Copied from PostgreSQL with minor registration changes.  If broken out, could override segments, etc
       def initialize_type_map(m) # :nodoc:
         register_class_with_limit m, 'int2', Type::Integer
         register_class_with_limit m, 'int4', Type::Integer
@@ -153,8 +153,7 @@ module ActiveRecord
           # places after decimal  = fmod - 4 & 0xffff
           # places before decimal = (fmod - 4) >> 16 & 0xffff
           if fmod && (fmod - 4 & 0xffff).zero?
-            # FIXME: Remove this class, and the second argument to
-            # lookups on PG
+            # Remove this class, and the second argument to lookups on PG
             Type::DecimalWithoutScale.new(precision: precision)
           else
             OID::Decimal.new(precision: precision, scale: scale)
@@ -162,6 +161,7 @@ module ActiveRecord
         end
       end
 
+      # rubocop:disable Style/CyclomaticComplexity
       def configure_connection
         if @config[:encoding]
           @connection.set_client_encoding(@config[:encoding])
@@ -180,6 +180,7 @@ module ActiveRecord
           end
         end
       end
+      # rubocop:enable Style/CyclomaticComplexity
 
       # Returns the list of a table's column names, data types, and default values.
       #
