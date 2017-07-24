@@ -28,17 +28,9 @@ module ActiveRecord
         #   create_database 'foo_development', encoding: 'unicode'
         def create_database(name, options = {})
           options = { encoding: 'utf8' }.merge!(options.symbolize_keys)
-
-          option_string = options.inject("") do |memo, (key, value)|
-            memo += case key
-                    when :owner
-                      " OWNER = \"#{value}\""
-                    when :connection_limit
-                      " CONNECTION LIMIT = #{value}"
-                    else
-                      ''
-                    end
-          end
+          option_string = ''
+          option_string += " OWNER = \"#{options[:owner]}\"" if options[:owner].present?
+          option_string += " CONNECTION LIMIT = #{options[:connection_limit]}" if options[:connection_limit].present?
 
           execute "CREATE DATABASE #{quote_table_name(name)}#{option_string}"
         end
@@ -55,6 +47,7 @@ module ActiveRecord
         end
 
         # Returns the list of all column definitions for a table.
+        # rubocop:disable Metrics/ParameterLists
         def columns(table_name)
           column_definitions(table_name.to_s).map do |column_name, type, default, notnull, oid, fmod, encoding|
             default_value = extract_value_from_default(default)
@@ -64,15 +57,18 @@ module ActiveRecord
             new_column(column_name, default_value, type_metadata, notnull == false, table_name, default_function)
           end
         end
+        # rubocop:enable Metrics/ParameterLists
 
         def determine_primary_key_type_conversion(type, default)
           return 'primary_key' if (type == 'integer' && default.to_s.starts_with?('"identity"'))
           type
         end
 
+        # rubocop:disable Metrics/ParameterLists
         def new_column(name, default, sql_type_metadata = nil, null = true, table_name = nil, default_function = nil) # :nodoc:
           RedshiftColumn.new(name, default, sql_type_metadata, null, table_name, default_function)
         end
+        # rubocop:enable Metrics/ParameterLists
 
         def table_options(table_name) # :nodoc:
           {}.tap do |options|
@@ -107,7 +103,7 @@ module ActiveRecord
           pks.present? ? pks[0] : pks
         end
 
-        # TODO: This entire method block for 't2.oid::regclass::text' to 't2.relname' 
+        # This entire method block for 't2.oid::regclass::text' to 't2.relname'
         def foreign_keys(table_name)
           fk_info = select_all(<<-SQL.strip_heredoc, 'SCHEMA')
             SELECT t2.relname AS to_table, a1.attname AS column, a2.attname AS primary_key, c.conname AS name, c.confupdtype AS on_update, c.confdeltype AS on_delete
