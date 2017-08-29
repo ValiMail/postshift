@@ -17,3 +17,5 @@ config.yml
 
 .ruby-gemset
 .ruby-version
+
+*.gem
