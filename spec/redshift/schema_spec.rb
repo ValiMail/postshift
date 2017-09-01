@@ -1,77 +1,119 @@
-require 'redshift_helper'
+require 'spec_helper'
 
-RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model do
-  subject { ARTest.connect.connection }
+RSpec.describe Postshift::Schema, type: :model do
+  before { ARTest.connect.connection }
 
-  describe '#create_database' do
-    pending 'Ensure full method is needed.  Possibly reduce options and call super?'
+  describe '.create_view!' do
+    subject { described_class.create_view! }
+
+    it 'generates admin view within Redshift' do
+      expect { subject }.to change(described_class, :view_exists?).from(false).to(true)
+    end
   end
 
-  describe '#create_table' do
-    pending
-  end
+  describe '.remove_view!' do
+    subject { described_class.remove_view! }
 
-  describe '#new_column' do
-    let(:column) { subject.new_column('test', 'default', 'the-data', false, 'testing') }
+    context 'w/ view exists' do
+      before { described_class.create_view! }
 
-    it { expect(column).to be_a ActiveRecord::ConnectionAdapters::RedshiftColumn }
-    it { expect(column.name).to eq 'test' }
-    it { expect(column.table_name).to eq 'testing' }
-    it { expect(column.sql_type_metadata).to eq 'the-data' }
-    it { expect(column.null).to be false }
-    it { expect(column.default).to eq 'default' }
-  end
-
-  describe '#table_options' do
-    context 'w/ table has dist & sort keys' do
-      it 'returns an empty hash' do
-        expect(subject.table_options('table_options')).to \
-          eq(distkey: 'name', sortkey: 'number')
+      it 'removes existing view' do
+        expect { subject }.to change(described_class, :view_exists?).from(true).to(false)
       end
     end
 
-    context 'w/ table has no additional settings' do
-      it 'returns an empty hash' do
-        expect(subject.table_options('column_options')).to eq({})
+    context 'w/ no view exists' do
+      it 'does nothing' do
+        expect { subject }.to_not change(described_class, :view_exists?).from(false)
       end
     end
   end
 
-  describe '#table_distkey' do
-    context 'w/ exists on table' do
-      it 'returns column name' do
-        expect(subject.table_distkey('table_options')).to eq 'name'
+  describe '.view_exists?' do
+    subject { described_class.view_exists? }
+
+    context 'w/ it does' do
+      before { described_class.create_view! }
+      it { is_expected.to be true }
+    end
+
+    context 'w/ it does not' do
+      before { described_class.remove_view! }
+      it { is_expected.to be false }
+    end
+  end
+  
+
+  describe '.generate_tbl_ddl_sql' do
+    subject { described_class.generate_tbl_ddl_sql }
+
+    it 'reads redshift ddl utility sql' do
+      is_expected.to start_with '--DROP VIEW admin.v_generate_tbl_ddl'
+    end
+  end
+
+  describe '.dump' do
+    before { described_class.create_view! }
+    before { described_class.dump }
+    subject { File.open(File.join(Postshift.root, 'tmp', Postshift::Schema::FILENAME)).read }
+
+    it 'writes output to a file' do
+      is_expected.to start_with '--DROP TABLE "public"."ar_internal_metadata"'
+    end
+  end
+
+  describe '.ddl_results' do
+    before { described_class.create_view! }
+    subject { described_class.ddl_results }
+
+    it { is_expected.to be_instance_of PG::Result }
+  end
+
+  describe '.output_location' do
+    subject { described_class.output_location }
+
+    context 'w/ Rails is available' do
+      before do
+        stub_const('Rails', double(root: 'rails-root'))
+      end
+
+      it 'outputs to postshift_schema in Rails db folder' do
+        is_expected.to eq File.join('rails-root', 'db', 'postshift_schema.sql')
       end
     end
 
-    context 'w/ does not exist on table' do
-      it 'returns nil' do
-        expect(subject.table_distkey('column_options')).to be_nil
+    context 'w/ outside of Rails' do
+      it 'outputs to postshift_schema in gem temp folder' do
+        is_expected.to eq File.join(Postshift.root, 'tmp', 'postshift_schema.sql')
       end
     end
   end
 
-  describe '#table_sortkey' do
-    context 'w/ exists on table' do
-      it 'returns column name' do
-        expect(subject.table_sortkey('table_options')).to eq 'number'
-      end
-    end
+  describe '.schemas' do
+    subject { described_class.schemas }
 
-    context 'w/ multiple exist on table' do
-      it 'returns column names in correct order' do
-        expect(subject.table_sortkey('table_options_multi_sorts')).to eq 'number1, number2, number3'
-      end
-    end
-
-    context 'w/ does not exist on table' do
-      it 'returns nil' do
-        expect(subject.table_sortkey('column_options')).to be_nil
-      end
+    it 'defaults to "public"' do
+      is_expected.to eq %w(public)
     end
   end
 
-  describe '#fetch_type_metadata' do
-    pending
+  describe '.ddl_sql' do
+    subject { described_class.ddl_sql }
+
+    it 'selects ddl' do
+      is_expected.to match /SELECT\s+ddl/
+    end
+
+    it 'selects from admin.v_generate_tbl_ddl' do
+      is_expected.to match /FROM\s+admin\.v_generate_tbl_ddl/
+    end
+
+    it 'filters to given schemaname' do
+      is_expected.to match /WHERE\s+schemaname IN \(\$1\)/
+    end
+
+    it 'orders by tablename, then sequence' do
+      is_expected.to match /ORDER BY\s+tablename ASC, seq ASC/
+    end
   end
 end

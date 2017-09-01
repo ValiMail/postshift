@@ -7,6 +7,10 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
     is_expected.to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter
   end
 
+  it 'sets Postshift.adapter' do
+    expect(Postshift.adapter).to be_a ActiveRecord::ConnectionAdapters::RedshiftAdapter
+  end
+
   describe '#native_database_types' do
     it do
       expect(subject.native_database_types.keys).to eq \
