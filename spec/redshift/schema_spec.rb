@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Postshift::Schema, type: :model do
   before { ARTest.connect.connection }
+  after(:each) { described_class.remove_view! }
 
   describe '.create_view!' do
     subject { described_class.create_view! }
@@ -23,6 +24,7 @@ RSpec.describe Postshift::Schema, type: :model do
     end
 
     context 'w/ no view exists' do
+
       it 'does nothing' do
         expect { subject }.to_not change(described_class, :view_exists?).from(false)
       end
@@ -38,7 +40,6 @@ RSpec.describe Postshift::Schema, type: :model do
     end
 
     context 'w/ it does not' do
-      before { described_class.remove_view! }
       it { is_expected.to be false }
     end
   end
@@ -83,8 +84,22 @@ RSpec.describe Postshift::Schema, type: :model do
     end
 
     context 'w/ outside of Rails' do
-      it 'outputs to postshift_schema in gem temp folder' do
-        is_expected.to eq File.join(Postshift.root, 'tmp', 'postshift_schema.sql')
+      let(:base_path) { File.join(Postshift.root, 'tmp') }
+
+      context '& /tmp directory exists' do
+        before { Dir.mkdir(base_path) unless Dir.exist?(base_path) }
+
+        it 'outputs to postshift_schema in gem temp folder' do
+          is_expected.to eq File.join(base_path, 'postshift_schema.sql')
+        end
+      end
+
+      context '& /tmp directory does not exist' do
+        before { FileUtils.remove_dir(base_path) }
+
+        it 'creates the "tmp" directory' do
+          expect { subject }.to change { Dir.exists?(base_path) }.from(false).to(true)
+        end
       end
     end
   end

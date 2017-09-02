@@ -38,8 +38,10 @@ module Postshift
     def self.output_location
       if defined?(Rails)
         File.join(Rails.root, 'db', FILENAME)
-      else 
-        File.join(Postshift.root, 'tmp', FILENAME)
+      else
+        base_path = File.join(Postshift.root, 'tmp')
+        Dir.mkdir(base_path) unless Dir.exist?(base_path)
+        File.join(base_path, FILENAME)
       end
     end
 
