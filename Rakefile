@@ -9,10 +9,6 @@ RSpec::Core::RakeTask.new(:spec)
 
 task default: :spec
 
-task :environment do
-  puts 'SETUP!'
-end
-
 import "./lib/tasks/schema.rake"
 
 namespace :spec do
