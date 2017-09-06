@@ -13,5 +13,10 @@ namespace :postshift do
     task dump: :connect do
       Postshift::Schema.dump
     end
+
+    desc 'Restores db/postshift_schema.sql file to Redshift database'
+    task restore: :connect do
+      Postshift::Schema.restore
+    end
   end
 end
