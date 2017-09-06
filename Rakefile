@@ -1,15 +1,12 @@
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
 require 'active_record'
-require 'postshift'
 require_relative 'spec/support/config'
 require_relative 'spec/support/connection'
 
 RSpec::Core::RakeTask.new(:spec)
 
 task default: :spec
-
-import "./lib/tasks/schema.rake"
 
 namespace :spec do
   include ActiveRecord::Tasks
