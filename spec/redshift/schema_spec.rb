@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'redshift_helper'
 
 RSpec.describe Postshift::Schema, type: :model do
   before { ARTest.connect.connection }
