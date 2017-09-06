@@ -1,7 +1,7 @@
 require 'redshift_helper'
 
 RSpec.describe Postshift::Schema, type: :model do
-  before { ARTest.connect.connection }
+  before { Postshift.adapter = ARTest.connect.connection }
   after(:each) { described_class.remove_view! }
 
   describe '.create_view!' do
@@ -24,7 +24,6 @@ RSpec.describe Postshift::Schema, type: :model do
     end
 
     context 'w/ no view exists' do
-
       it 'does nothing' do
         expect { subject }.to_not change(described_class, :view_exists?).from(false)
       end

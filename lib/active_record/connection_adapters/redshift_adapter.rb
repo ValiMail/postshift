@@ -34,9 +34,7 @@ module ActiveRecord
 
       # The postgres drivers don't allow the creation of an unconnected PGconn object,
       # so just pass a nil connection object for the time being.
-      ConnectionAdapters::RedshiftAdapter.new(nil, logger, conn_params, config).tap do |adapter|
-        Postshift.adapter = adapter
-      end
+      ConnectionAdapters::RedshiftAdapter.new(nil, logger, conn_params, config)
     end
   end
 
