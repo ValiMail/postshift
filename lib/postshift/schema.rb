@@ -31,6 +31,20 @@ module Postshift
       end
     end
 
+    def self.dump_sql
+      if File.exist?(output_location)
+        File.read(output_location)
+      else
+        puts 'Postshift Schema Dump file does not exist. Run task postshift:schema:dump'
+        false
+      end
+    end
+
+    def self.restore
+      sql = dump_sql
+      Postshift.connection.exec(sql) if sql.present?
+    end
+
     def self.ddl_results
       Postshift.connection.exec(ddl_sql, schemas)
     end

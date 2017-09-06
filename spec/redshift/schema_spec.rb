@@ -1,6 +1,9 @@
 require 'redshift_helper'
 
 RSpec.describe Postshift::Schema, type: :model do
+  let(:base_path) { File.join(Postshift.root, 'tmp') }
+  let(:clear_tmp) { FileUtils.remove_dir(base_path) }
+
   before { Postshift.adapter = ARTest.connect.connection }
   after(:each) { described_class.remove_view! }
 
@@ -62,6 +65,39 @@ RSpec.describe Postshift::Schema, type: :model do
     end
   end
 
+  describe '.dump_sql' do
+    before { clear_tmp }
+    subject { described_class.dump_sql }
+
+    context 'w/ file exists at output_location' do
+      before { File.write described_class.output_location, 'dump-output' }
+      it { is_expected.to eq 'dump-output' }
+    end
+
+    context 'w/ no file at output_location' do
+      it { is_expected.to be false }
+    end
+  end
+
+  describe '.restore' do
+    before { allow(Postshift).to receive(:connection).and_return double(exec: true) }
+    subject { described_class.restore }
+
+    context 'w/ dump file does not exist' do
+      before { allow(described_class).to receive(:dump_sql).and_return false }
+
+      it { is_expected.to be_nil }
+      it { expect(Postshift).to_not have_received(:connection) }
+    end
+
+    context 'w/ dump file' do
+      before { allow(Postshift.connection).to receive(:exec) }
+      before { allow(described_class).to receive(:dump_sql).and_return 'restore sql' }
+      before { subject }
+      it { expect(Postshift.connection).to have_received(:exec).with('restore sql') }
+    end
+  end
+
   describe '.ddl_results' do
     before { described_class.create_view! }
     subject { described_class.ddl_results }
@@ -83,7 +119,6 @@ RSpec.describe Postshift::Schema, type: :model do
     end
 
     context 'w/ outside of Rails' do
-      let(:base_path) { File.join(Postshift.root, 'tmp') }
 
       context '& /tmp directory exists' do
         before { Dir.mkdir(base_path) unless Dir.exist?(base_path) }
@@ -94,7 +129,7 @@ RSpec.describe Postshift::Schema, type: :model do
       end
 
       context '& /tmp directory does not exist' do
-        before { FileUtils.remove_dir(base_path) }
+        before { clear_tmp }
 
         it 'creates the "tmp" directory' do
           expect { subject }.to change { Dir.exists?(base_path) }.from(false).to(true)
