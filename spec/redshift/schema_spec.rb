@@ -93,11 +93,11 @@ RSpec.describe Postshift::Schema, type: :model do
     before { described_class.dump }
     subject { File.open(File.join(Postshift.root, 'tmp', Postshift::Schema::FILENAME)).read }
 
-    it 'writes output to a file' do
-      is_expected.to start_with '--DROP TABLE "public"."ar_internal_metadata"'
+    it 'includes create table statements' do
+      is_expected.to include 'CREATE TABLE IF NOT EXISTS "public"."ar_internal_metadata"'
     end
 
-    it 'includes view ddl' do
+    it 'includes create view statements' do
       is_expected.to include 'CREATE OR REPLACE VIEW public.v_test_dump'
     end
   end
