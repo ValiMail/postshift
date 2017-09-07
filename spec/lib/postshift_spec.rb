@@ -33,7 +33,7 @@ RSpec.describe Postshift do
     end
 
     context 'w/ set' do
-      before { described_class.class_variable_set(:@@adapter, 'adapter') }
+      before { described_class.adapter = 'adapter' }
       it { is_expected.to eq 'adapter' }
     end
   end

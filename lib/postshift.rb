@@ -12,14 +12,6 @@ module Postshift
     File.dirname __dir__
   end
 
-  def self.adapter=(connection_adapter)
-    @@adapter = connection_adapter
-  end
-
-  def self.adapter
-    @@adapter
-  end
-
   def self.connection
     adapter.respond_to?(:raw_connection) ? adapter.raw_connection : nil
   end
