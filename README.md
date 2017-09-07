@@ -67,6 +67,25 @@ end
 For more information on compression types:
 <http://docs.aws.amazon.com/redshift/latest/dg/c_Compression_encodings.html>
 
+## Schema Dump
+
+Several Rake tasks exist to help with performing a schema dump of an existing Redshift database.  These utilize the [admin scripts provided by Amazon](https://github.com/awslabs/amazon-redshift-utils/tree/master/src/AdminViews).  All actions are performed using `ActiveRecord::Base.connection` by default.
+
+These views **must** exist within the Redshift database under the **admin** schema prior to any _dump_ or _restore_ actions.  To generate, simple run:
+
+```
+rake postshift:schema:prepare
+```
+
+Once these views are in place, the _dump_ and _restore_ will be available and functional.
+
+
+```
+rake postshift:schema:dump
+rake postshift:schema:restore
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
