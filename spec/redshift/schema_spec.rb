@@ -94,7 +94,7 @@ RSpec.describe Postshift::Schema, type: :model do
     subject { File.open(File.join(Postshift.root, 'tmp', Postshift::Schema::FILENAME)).read }
 
     it 'includes create table statements' do
-      is_expected.to include 'CREATE TABLE IF NOT EXISTS "public"."ar_internal_metadata"'
+      is_expected.to include 'CREATE TABLE IF NOT EXISTS public.ar_internal_metadata'
     end
 
     it 'includes create view statements' do
