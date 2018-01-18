@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    postshift (0.2.0)
+    postshift (0.2.1)
       activerecord (~> 5.0)
       activesupport (~> 5.0)
       pg (>= 0.20.0)

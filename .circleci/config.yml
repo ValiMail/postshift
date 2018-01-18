@@ -1,0 +1,64 @@
+version: 2.0
+
+defaults: &defaults
+  working_directory: ~/postshift
+  environment:
+    CC_TEST_REPORTER_ID: '709f763c91a65c17f11b90e2d08aae4886ac6a4208760a30c692232a5b098555'
+  docker:
+    - image: circleci/ruby:2.4.3
+      environment:
+      - RAILS_ENV=test
+      - RACK_ENV=test
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+  test-ar-5.0:
+    <<: *defaults
+    steps:
+      - run:
+          name: Run RSpec
+          command: |
+            ./cc-test-reporter before-build
+            bundle exec appraisal ar-5.0 rake spec:isolated
+            ./cc-test-reporter after-build --exit-code $?
+      - store_artifacts:
+          path: coverage
+  test-ar-5.1:
+    <<: *defaults
+    steps:
+      - run:
+          name: Run RSpec
+          command: |
+            ./cc-test-reporter before-build
+            bundle exec appraisal ar-5.1 rake spec:isolated
+            ./cc-test-reporter after-build --exit-code $?
+      - store_artifacts:
+          path: coverage
+  test-ar-5.2:
+    <<: *defaults
+    steps:
+      - run:
+          name: Run RSpec
+          command: |
+            ./cc-test-reporter before-build
+            bundle exec appraisal ar-5.2 rake spec:isolated
+            ./cc-test-reporter after-build --exit-code $?
+      - store_artifacts:
+          path: coverage
+
+workflows:
+  version: 2
+  run-tests:
+    jobs:
+      - test-ar-5.0:
+          requires:
+            - build
+      - test-ar-5.1:
+          requires:
+            - build
+      - test-ar-5.2:
+          requires:
+            - build
