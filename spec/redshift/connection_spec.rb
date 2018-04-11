@@ -13,4 +13,10 @@ RSpec.describe ActiveRecord::ConnectionAdapters::RedshiftAdapter, type: :model d
         %i( primary_key string text integer float decimal datetime time date bigint boolean )
     end
   end
+
+  describe '#reset!' do
+    it do
+      expect { subject.reset! }.to_not raise_exception(PG::SyntaxError)
+    end
+  end
 end
