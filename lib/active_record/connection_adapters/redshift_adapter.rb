@@ -117,6 +117,17 @@ module ActiveRecord
         Float::INFINITY
       end
 
+      def reset!
+        @lock.synchronize do
+          clear_cache!
+          reset_transaction
+          unless @connection.transaction_status == ::PG::PQTRANS_IDLE
+            @connection.query "ROLLBACK"
+          end
+          configure_connection
+        end
+      end
+
     private
 
       # Copied from PostgreSQL with minor registration changes.  If broken out, could override segments, etc
