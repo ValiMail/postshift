@@ -3,7 +3,7 @@ require 'redshift_helper'
 class QueryTest < ActiveRecord::Base
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :query_test do
     name 'sur'
     number 1
