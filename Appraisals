@@ -12,7 +12,6 @@ end
 
 appraise 'ar-5.2' do
   gem 'pg', '~> 1.0.0'
-  gem 'rails', git: 'https://github.com/rails/rails', require: false
-  gem 'activerecord'
-  gem 'activesupport'
+  gem 'activerecord', '5.2.0'
+  gem 'activesupport', '5.2.0'
 end
