@@ -131,7 +131,7 @@ module ActiveRecord
     private
 
       # Copied from PostgreSQL with minor registration changes.  If broken out, could override segments, etc
-      def initialize_type_map(m) # :nodoc:
+      def initialize_type_map(m = type_map) # :nodoc:
         register_class_with_limit m, 'int2', Type::Integer
         register_class_with_limit m, 'int4', Type::Integer
         register_class_with_limit m, 'int8', Type::Integer

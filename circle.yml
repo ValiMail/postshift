@@ -1,9 +1,0 @@
-machine:
-  ruby:
-    version: 2.4.0
-database:
-  override:
-    - echo 'Skipping DB section.'
-test:
-  override:
-    - bundle exec rake spec:isolated

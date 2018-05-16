@@ -4,7 +4,10 @@ Amazon Redshift extension for ActiveRecord 5 (Rails 5) PostgreSQL adapter based 
 
 1. Function as an extension of the PostgreSQL ActiveRecord adapter.  Overriding or extending as needed to properly account for the differences between PostgreSQL and Redshift.
 2. Create a functioning test suite.
-3. Operate within both ActiveRecord 5 and 5.1.
+3. Support the following versions of ActiveRecord:
+	* 5.0
+	* 5.1
+	* 5.2
 
 <https://github.com/ConsultingMD/activerecord5-redshift-adapter>
 
@@ -117,6 +120,7 @@ Additionally, there is multi-version test support through [Appraisal](https://gi
 appraisal install
 appraisal ar-5.0 rake spec
 appraisal ar-5.1 rake spec
+appraisal ar-5.2 rake spec
 ```
 
 ## Contributing
