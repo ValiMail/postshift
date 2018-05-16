@@ -15,7 +15,7 @@ end
 class StringPrimaryKeyTest < ActiveRecord::Base
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :primary_key_test do
   end
 end

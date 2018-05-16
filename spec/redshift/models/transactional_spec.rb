@@ -3,7 +3,7 @@ require 'redshift_helper'
 class Transactional < ActiveRecord::Base
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :transactional do
     name 'me'
   end

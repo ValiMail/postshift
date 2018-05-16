@@ -3,7 +3,7 @@ require 'redshift_helper'
 class DataType < ActiveRecord::Base
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :data_type do
     a_required_string   'is-present'
     a_required_boolean  true

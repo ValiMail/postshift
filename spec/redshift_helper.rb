@@ -1,13 +1,13 @@
 require 'spec_helper'
-require 'factory_girl'
+require 'factory_bot'
 require 'database_cleaner'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
     ARTest.connect
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
     DatabaseCleaner.strategy = :deletion
   end
 
