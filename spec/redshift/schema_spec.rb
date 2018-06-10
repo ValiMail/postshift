@@ -74,7 +74,6 @@ RSpec.describe Postshift::Schema, type: :model do
       it { is_expected.to be true }
     end
   end
-  
 
   describe '.generate_ddl_sql' do
     context 'for v_generate_tbl_ddl' do
@@ -169,7 +168,7 @@ RSpec.describe Postshift::Schema, type: :model do
         before { clear_tmp }
 
         it 'creates the "tmp" directory' do
-          expect { subject }.to change { Dir.exists?(base_path) }.from(false).to(true)
+          expect { subject }.to change { Dir.exist?(base_path) }.from(false).to(true)
         end
       end
     end
@@ -187,19 +186,19 @@ RSpec.describe Postshift::Schema, type: :model do
     subject { described_class.tbl_ddl_sql }
 
     it 'selects ddl' do
-      is_expected.to match /SELECT\s+ddl/
+      is_expected.to match(/SELECT\s+ddl/)
     end
 
     it 'selects from admin.v_generate_tbl_ddl' do
-      is_expected.to match /FROM\s+admin\.v_generate_tbl_ddl/
+      is_expected.to match(/FROM\s+admin\.v_generate_tbl_ddl/)
     end
 
     it 'filters to given schemaname' do
-      is_expected.to match /WHERE\s+schemaname IN \(\$1\)/
+      is_expected.to match(/WHERE\s+schemaname IN \(\$1\)/)
     end
 
     it 'orders by tablename, then sequence' do
-      is_expected.to match /ORDER BY\s+tablename ASC, seq ASC/
+      is_expected.to match(/ORDER BY\s+tablename ASC, seq ASC/)
     end
   end
 
@@ -207,19 +206,19 @@ RSpec.describe Postshift::Schema, type: :model do
     subject { described_class.view_ddl_sql }
 
     it 'selects ddl' do
-      is_expected.to match /SELECT\s+ddl/
+      is_expected.to match(/SELECT\s+ddl/)
     end
 
     it 'selects from admin.v_generate_view_ddl' do
-      is_expected.to match /FROM\s+admin\.v_generate_view_ddl/
+      is_expected.to match(/FROM\s+admin\.v_generate_view_ddl/)
     end
 
     it 'filters to given schemaname' do
-      is_expected.to match /WHERE\s+schemaname IN \(\$1\)/
+      is_expected.to match(/WHERE\s+schemaname IN \(\$1\)/)
     end
 
     it 'orders by viewname' do
-      is_expected.to match /ORDER BY\s+viewname ASC/
+      is_expected.to match(/ORDER BY\s+viewname ASC/)
     end
   end
 end
