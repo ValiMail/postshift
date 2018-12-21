@@ -128,6 +128,16 @@ module ActiveRecord
         end
       end
 
+      def extension_enabled?(name)
+        return false unless supports_extensions?
+        super
+      end
+
+      def extensions
+        return [] unless supports_extensions?
+        super
+      end
+
     private
 
       # Copied from PostgreSQL with minor registration changes.  If broken out, could override segments, etc
