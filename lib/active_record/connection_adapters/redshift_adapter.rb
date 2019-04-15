@@ -144,7 +144,7 @@ module ActiveRecord
         m.alias_type 'name', 'varchar'
         m.alias_type 'bpchar', 'varchar'
         m.register_type 'bool', Type::Boolean.new
-        m.alias_type 'timestamptz', 'timestamp'
+        m.register_type 'timestamptz', Type::Time.new
         m.register_type 'date', Type::Date.new
 
         m.register_type 'timestamp' do |_, _, sql_type|
