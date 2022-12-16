@@ -5,7 +5,7 @@ defaults: &defaults
   environment:
     CC_TEST_REPORTER_ID: '709f763c91a65c17f11b90e2d08aae4886ac6a4208760a30c692232a5b098555'
   docker:
-    - image: circleci/ruby:2.4.3
+    - image: cimg/ruby:2.7.7
       environment:
       - RAILS_ENV=test
       - RACK_ENV=test
