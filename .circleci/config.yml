@@ -54,11 +54,5 @@ workflows:
   run-tests:
     jobs:
       - test-ar-5.0:
-          requires:
-            - build
       - test-ar-5.1:
-          requires:
-            - build
       - test-ar-5.2:
-          requires:
-            - build
